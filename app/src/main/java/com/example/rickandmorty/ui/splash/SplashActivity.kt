@@ -14,7 +14,9 @@ import com.example.rickandmorty.common.Constants
 import com.example.rickandmorty.common.Constants.FIRST_LAUNCH_KEY
 import com.example.rickandmorty.common.Constants.PREFS_NAME
 import com.example.rickandmorty.databinding.ActivitySplashBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SplashActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySplashBinding
