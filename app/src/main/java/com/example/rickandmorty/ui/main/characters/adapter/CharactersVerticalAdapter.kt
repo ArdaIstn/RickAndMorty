@@ -1,7 +1,8 @@
+package com.example.rickandmorty.ui.main.characters.adapter
+
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.rickandmorty.R
 import com.example.rickandmorty.common.loadImage
 import com.example.rickandmorty.data.model.Character
