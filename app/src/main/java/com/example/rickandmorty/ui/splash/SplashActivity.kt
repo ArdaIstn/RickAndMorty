@@ -4,13 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.example.rickandmorty.MainActivity
-import com.example.rickandmorty.R
-import com.example.rickandmorty.common.Constants
+import com.example.rickandmorty.ui.main.main.MainActivity
 import com.example.rickandmorty.common.Constants.FIRST_LAUNCH_KEY
 import com.example.rickandmorty.common.Constants.PREFS_NAME
 import com.example.rickandmorty.databinding.ActivitySplashBinding

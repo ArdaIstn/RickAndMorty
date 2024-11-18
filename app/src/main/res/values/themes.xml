@@ -3,7 +3,12 @@
     <style name="Base.Theme.RickAndMorty" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:statusBarColor">@color/eden</item>
     </style>
 
     <style name="Theme.RickAndMorty" parent="Base.Theme.RickAndMorty" />
+
+    <style name="Theme.RickAndMorty.Splash" parent="Base.Theme.RickAndMorty">
+        <item name="android:statusBarColor">@color/eden</item>
+    </style>
 </resources>
