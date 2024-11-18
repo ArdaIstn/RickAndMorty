@@ -1,60 +1,97 @@
 package com.example.rickandmorty.ui.main.characters
 
+import CharactersVerticalAdapter
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.rickandmorty.R
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.rickandmorty.databinding.FragmentCharactersBinding
+import dagger.hilt.android.AndroidEntryPoint
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [CharactersFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+@AndroidEntryPoint
 class CharactersFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private lateinit var binding: FragmentCharactersBinding
+    private val viewModel: CharactersViewModel by viewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    private var horizontalScrollState: Parcelable? = null // Yatay RecyclerView scroll durumu
+    private var verticalScrollState: Parcelable? = null // Dikey RecyclerView scroll durumu
+    private var selectedLocationPosition: Int = RecyclerView.NO_POSITION // Seçili lokasyon
+    private var locationsAdapter: LocationsHorizontalAdapter? = null
+    private var charactersAdapter: CharactersVerticalAdapter? = null
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentCharactersBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Lokasyonları gözlemle
+        observeLocations()
+
+        // Karakterleri gözlemle
+        observeCharacters()
+
+
+    }
+
+    override fun onPause() {
+        super.onPause()
+        // Scroll durumlarını ve seçili öğeyi kaydet
+        horizontalScrollState = binding.horizontalRv.layoutManager?.onSaveInstanceState()
+        verticalScrollState = binding.verticalRv.layoutManager?.onSaveInstanceState()
+        selectedLocationPosition = locationsAdapter?.selectedPosition ?: RecyclerView.NO_POSITION
+    }
+
+    private fun observeLocations() {
+        viewModel.locations.observe(viewLifecycleOwner) { locations ->
+            locationsAdapter = LocationsHorizontalAdapter(locations) { location ->
+                viewModel.fetchCharactersByLocation(location.residents)
+            }.apply {
+                // Adapter'ın seçili pozisyonunu kaydedilen duruma göre ayarla
+                selectedPosition = selectedLocationPosition
+
+            }
+
+            binding.horizontalRv.apply {
+                adapter = locationsAdapter
+                layoutManager =
+                    LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+
+                // Scroll durumunu geri yükle
+                horizontalScrollState?.let { state ->
+                    layoutManager?.onRestoreInstanceState(state)
+                }
+            }
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_characters, container, false)
-    }
+    private fun observeCharacters() {
+        // Karakter listesini gözlemle
+        viewModel.characters.observe(viewLifecycleOwner) { characters ->
+            charactersAdapter = CharactersVerticalAdapter(characters) { character ->
+                val action = CharactersFragmentDirections.actionCharactersToDetail(character)
+                findNavController().navigate(action)
+            }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment CharactersFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            CharactersFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+            binding.verticalRv.apply {
+                adapter = charactersAdapter
+                layoutManager = LinearLayoutManager(requireContext())
+
+                // Scroll durumunu geri yükle
+                verticalScrollState?.let { state ->
+                    layoutManager?.onRestoreInstanceState(state)
                 }
             }
+        }
     }
 }
