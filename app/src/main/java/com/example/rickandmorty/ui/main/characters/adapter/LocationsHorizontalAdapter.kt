@@ -34,9 +34,9 @@ class LocationsHorizontalAdapter(
 
             // Seçili öğe için siyah, diğerleri için beyaz arka plan
             if (position == selectedPosition) {
-                binding.locationCard.setBackgroundResource(R.color.black)
+                binding.locationCard.setBackgroundResource(R.drawable.card_selected)
             } else {
-                binding.locationCard.setBackgroundResource(R.color.white)
+                binding.locationCard.setBackgroundResource(R.drawable.card_unselected)
             }
 
             binding.root.setOnClickListener {
