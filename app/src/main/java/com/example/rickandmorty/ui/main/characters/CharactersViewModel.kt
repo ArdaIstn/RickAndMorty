@@ -10,9 +10,7 @@ import com.example.rickandmorty.data.model.Character
 import com.example.rickandmorty.data.model.Result
 import com.example.rickandmorty.data.repository.CharacterRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,6 +24,10 @@ class CharactersViewModel @Inject constructor(
     private val _characters = MutableLiveData<List<Character>>()
     val characters: LiveData<List<Character>> get() = _characters
 
+    private val _isEmpty = MutableLiveData(false)
+    val isEmpty: LiveData<Boolean> get() = _isEmpty
+
+
     init {
         fetchLocations()
     }
@@ -35,6 +37,7 @@ class CharactersViewModel @Inject constructor(
             when (val response = characterRepository.getResultList()) {
                 is Resource.Success -> {
                     _locations.postValue(response.data)
+                    _isEmpty.value = true
                 }
 
                 is Resource.Fail -> {
@@ -42,17 +45,22 @@ class CharactersViewModel @Inject constructor(
                     Log.e("CharactersViewModel", "Error fetching locations: ${response.message}")
                 }
 
-                is Resource.Error -> TODO()
+                is Resource.Error -> {
+                    // İstisna durumunda istisnayı gönderiyoruz
+                    Log.e("CharactersViewModel", "Error fetching locations", response.throwable)
+                }
             }
 
         }
     }
 
     fun fetchCharactersByLocation(residentList: List<String>) {
+
         viewModelScope.launch {
             // Eğer liste boşsa, hata mesajı gönder
             if (residentList.isEmpty()) {
-                return@launch
+                _isEmpty.value = true
+                _characters.postValue(emptyList())
             }
 
             // Eğer liste tek bir elemandan oluşuyorsa, getCharacterByLocation fonksiyonunu kullan
@@ -64,16 +72,19 @@ class CharactersViewModel @Inject constructor(
                     is Resource.Success -> {
                         // Karakter başarıyla alındı, veriyi post et
                         _characters.postValue(result.data)
+                        _isEmpty.value = false
 
                     }
 
                     is Resource.Fail -> {
-                        // Hata mesajı al
+                        Log.e("CharactersViewModel", "Error fetching locations: ${result.message}")
 
                     }
 
                     is Resource.Error -> {
-                        // İstisna mesajı al
+                        Log.e(
+                            "CharactersViewModel", "Error fetching locations: ${result.throwable}"
+                        )
                     }
                 }
             } else {
@@ -82,6 +93,7 @@ class CharactersViewModel @Inject constructor(
                     is Resource.Success -> {
                         // Karakterler başarıyla alındı
                         _characters.postValue(result.data)
+                        _isEmpty.value = false
                     }
 
                     is Resource.Fail -> {
