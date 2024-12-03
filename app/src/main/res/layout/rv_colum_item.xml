@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        app:cardBackgroundColor="#CBDBDB"
+        app:cardBackgroundColor="@color/card_background_color"
         app:cardCornerRadius="15dp"
         app:cardElevation="8dp">
 
@@ -49,7 +49,7 @@
                 android:id="@+id/ivDeadOrAlive"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/tvCharacterName"
                 tools:srcCompat="@drawable/ic_alive" />
@@ -58,13 +58,27 @@
                 android:id="@+id/tvDeadOrAlive"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="4dp"
                 android:textColor="@color/black"
-                android:textSize="16sp"
+                android:textSize="18sp"
+                android:textStyle="bold|italic"
                 app:layout_constraintBottom_toBottomOf="@+id/ivDeadOrAlive"
                 app:layout_constraintStart_toEndOf="@+id/ivDeadOrAlive"
                 app:layout_constraintTop_toTopOf="@+id/ivDeadOrAlive"
                 tools:text="Alive" />
+
+            <TextView
+                android:id="@+id/tvCardSpecy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold|italic"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:text="Human" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </LinearLayout>
