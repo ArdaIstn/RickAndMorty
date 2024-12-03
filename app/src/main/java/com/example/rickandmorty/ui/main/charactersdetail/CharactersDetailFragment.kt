@@ -34,7 +34,7 @@ class CharactersDetailFragment : Fragment() {
             binding.tvGenderDetail.text = character.gender
             binding.tvOriginDetail.text = character.origin.name
             binding.tvLocationDetail.text = character.location.name
-            binding.tvEpiosedDetail.text = character.episode.extractIds()
+            binding.tvEpisodesDetail.text = character.episode.extractIds()
             binding.tvCreatedDetail.text = character.created.formatDateString()
             binding.ivCharacterDetail.loadImage(character.image)
 
