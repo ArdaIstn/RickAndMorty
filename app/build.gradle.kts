@@ -64,6 +64,9 @@ dependencies {
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
 
+    //Lottie
+    implementation (libs.lottie)
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
