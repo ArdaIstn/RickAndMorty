@@ -1,5 +1,6 @@
 package com.example.rickandmorty.common
 
+import android.view.View
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavDirections
@@ -29,4 +30,11 @@ fun String.formatDateString(): String {
 
 fun Fragment.navigateTo(action: NavDirections) {
     findNavController().navigate(action)
+}
+fun View.visible() {
+    visibility = View.VISIBLE
+}
+
+fun View.gone() {
+    visibility = View.GONE
 }
