@@ -23,6 +23,8 @@ class CharactersViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(CharacterState())
     val uiState: StateFlow<CharacterState> get() = _uiState
 
+    private var originalCharacterList: List<Character> = emptyList()
+
     init {
         fetchLocations()
     }
@@ -37,6 +39,7 @@ class CharactersViewModel @Inject constructor(
                         locations = response.data, isEmpty = response.data.isEmpty()
                     )
                 }
+
 
                 is Resource.Fail -> {
                     // Hata durumunda failMessage ile güncelleme yapıyoruz
@@ -63,6 +66,7 @@ class CharactersViewModel @Inject constructor(
                 _uiState.value = _uiState.value.copy(
                     characters = emptyList(), isEmpty = true
                 )
+                originalCharacterList = emptyList()
                 return@launch
             }
 
@@ -79,6 +83,7 @@ class CharactersViewModel @Inject constructor(
                     _uiState.value = _uiState.value.copy(
                         characters = result.data, isEmpty = result.data.isEmpty()
                     )
+                    originalCharacterList = result.data
                 }
 
                 is Resource.Fail -> {
@@ -97,6 +102,26 @@ class CharactersViewModel @Inject constructor(
             }
         }
     }
+
+
+    fun filterCharacters(query: String) {
+        val filteredList = if (query.isEmpty()) {
+            // Eğer query boşsa, orijinal listeyi döndür
+            Log.e("query", "Boş kanka")
+            originalCharacterList
+
+        } else {
+            // Arama sorgusuna göre filtreleme yap
+            originalCharacterList.filter {
+                Log.e("query", "Dolu kanka")
+                it.name.contains(query, ignoreCase = true)
+            }
+        }
+
+        // UI'yi güncelle
+        _uiState.value = _uiState.value.copy(characters = filteredList)
+    }
+
 
     data class CharacterState(
         val locations: List<Result>? = null,

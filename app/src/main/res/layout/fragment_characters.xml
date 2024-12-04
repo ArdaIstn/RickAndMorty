@@ -21,12 +21,11 @@
         android:id="@+id/verticalRv"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/horizontalRv" />
+        app:layout_constraintTop_toBottomOf="@+id/materialCardView" />
 
     <TextView
         android:id="@+id/isEmpty"
@@ -56,14 +55,40 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/materialCardView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/horizontalRv"
+        app:strokeColor="@color/black"
+        app:strokeWidth="1dp">
+
+        <SearchView
+            android:id="@+id/searchView"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:background="#FAFAFA"
+            android:queryHint="Search Character"
+            app:iconifiedByDefault="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbarCharacters" />
+    </com.google.android.material.card.MaterialCardView>
+
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/pacifico"
+        android:text="@string/characters_title_text"
         android:textColor="@color/chardonnay"
         android:textSize="30sp"
-        android:text="@string/characters_title_text"
         app:layout_constraintBottom_toBottomOf="@+id/toolbarCharacters"
         app:layout_constraintEnd_toEndOf="@+id/toolbarCharacters"
         app:layout_constraintStart_toStartOf="@+id/toolbarCharacters"
