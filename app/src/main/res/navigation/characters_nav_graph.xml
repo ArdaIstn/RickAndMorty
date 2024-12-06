@@ -14,9 +14,6 @@
             android:id="@+id/action_characters_to_detail"
             app:destination="@id/charactersDetailFragment" />
     </fragment>
-    <action
-        android:id="@+id/action_characters_to_detail"
-        app:destination="@id/charactersDetailFragment" />
     <fragment
         android:id="@+id/charactersDetailFragment"
         android:name="com.example.rickandmorty.ui.main.charactersdetail.CharactersDetailFragment"
