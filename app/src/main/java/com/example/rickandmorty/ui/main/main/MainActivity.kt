@@ -1,12 +1,17 @@
 package com.example.rickandmorty.ui.main.main
 
+import android.graphics.Rect
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.rickandmorty.R
+import com.example.rickandmorty.common.gone
+import com.example.rickandmorty.common.visible
 import com.example.rickandmorty.databinding.ActivityMainBinding
+import com.example.rickandmorty.ui.main.characters.CharactersFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -19,6 +24,25 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupBottomNav()
+        hideOrShowBottomNav()
+
+        binding.bottomNavigationView.setOnItemReselectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.characters_nav_graph -> {
+                    // Eğer şu an ekranda Home Fragment varsa onun reset metodunu çağır
+
+                    val currentFragment =
+                        navHostFragment.childFragmentManager.fragments.firstOrNull()
+
+                    if (currentFragment is CharactersFragment) {
+                        currentFragment.resetVerticalRecyclerView()
+                    }
+                }
+                // Diğer sekmeler için gerekirse işlemler eklenebilir.
+            }
+        }
+
+    }
 
     private fun hideOrShowBottomNav() {
         val rootView = findViewById<View>(android.R.id.content)
