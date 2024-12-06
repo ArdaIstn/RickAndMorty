@@ -5,14 +5,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.navArgs
-import com.example.rickandmorty.R
+import androidx.navigation.fragment.findNavController
 import com.example.rickandmorty.common.extractIds
 import com.example.rickandmorty.common.formatDateString
 import com.example.rickandmorty.common.loadImage
-import com.example.rickandmorty.data.model.Character
 import com.example.rickandmorty.databinding.FragmentCharactersDetailBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -26,18 +23,10 @@ class CharactersDetailFragment : Fragment() {
     ): View {
         binding = FragmentCharactersDetailBinding.inflate(inflater, container, false)
         setArguments()
+        observeCharacter()
 
-        viewModel.character.observe(viewLifecycleOwner) { character ->
-            binding.tvCharacterDetailName.text = character.name
-            binding.tvStatusDetail.text = character.status
-            binding.tvSpecyDetail.text = character.species
-            binding.tvGenderDetail.text = character.gender
-            binding.tvOriginDetail.text = character.origin.name
-            binding.tvLocationDetail.text = character.location.name
-            binding.tvEpisodesDetail.text = character.episode.extractIds()
-            binding.tvCreatedDetail.text = character.created.formatDateString()
-            binding.ivCharacterDetail.loadImage(character.image)
-
+        binding.backButton.setOnClickListener {
+            goBack()
         }
 
 
@@ -51,6 +40,23 @@ class CharactersDetailFragment : Fragment() {
         }
     }
 
+    private fun observeCharacter() {
+        viewModel.character.observe(viewLifecycleOwner) { character ->
+            binding.tvCharacterDetailName.text = character.name
+            binding.tvStatusDetail.text = character.status
+            binding.tvSpecyDetail.text = character.species
+            binding.tvGenderDetail.text = character.gender
+            binding.tvOriginDetail.text = character.origin.name
+            binding.tvLocationDetail.text = character.location.name
+            binding.tvEpisodesDetail.text = character.episode.extractIds()
+            binding.tvCreatedDetail.text = character.created.formatDateString()
+            binding.ivCharacterDetail.loadImage(character.image)
+        }
+    }
+
+    private fun goBack() {
+        findNavController().navigateUp()
+    }
 
 }
 
