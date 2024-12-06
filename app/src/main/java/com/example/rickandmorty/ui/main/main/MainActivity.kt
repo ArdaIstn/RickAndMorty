@@ -19,6 +19,24 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupBottomNav()
+
+    private fun hideOrShowBottomNav() {
+        val rootView = findViewById<View>(android.R.id.content)
+        rootView.viewTreeObserver.addOnGlobalLayoutListener {
+            val rect = Rect()
+            rootView.getWindowVisibleDisplayFrame(rect)
+            val screenHeight = rootView.rootView.height
+            val keypadHeight = screenHeight - rect.bottom
+
+            // Klavye açık mı kontrol et
+            if (keypadHeight > screenHeight * 0.15) {
+                // Klavye açık, BottomNavigationView'i gizle
+                binding.bottomNavigationView.gone()
+            } else {
+                // Klavye kapalı, BottomNavigationView'i göster
+                binding.bottomNavigationView.visible()
+            }
+        }
     }
 
     private fun setupBottomNav() {
