@@ -29,8 +29,7 @@ class CharactersFragment : Fragment() {
     private val locationsAdapter: LocationsHorizontalAdapter by lazy {
         LocationsHorizontalAdapter { location ->
             viewModel.fetchCharactersByLocation(location.residents)
-            binding.searchView.clearFocus()
-            binding.searchView.setQuery("", false)
+            clearSearchView()
         }
     }
 
@@ -66,7 +65,7 @@ class CharactersFragment : Fragment() {
                 newText?.let {
                     viewModel.filterCharacters(it)
                     if (it.isEmpty()) {
-                        binding.verticalRv.scrollToPosition(0)
+                        resetVerticalRecyclerView()
                     }
                 }
                 return true
@@ -150,5 +149,11 @@ class CharactersFragment : Fragment() {
         binding.searchView.clearFocus()
     }
 }
+    fun resetVerticalRecyclerView() {
+        binding.verticalRv.scrollToPosition(0)
+    }
+}
+
+
 
 
