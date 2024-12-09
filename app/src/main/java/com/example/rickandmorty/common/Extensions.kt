@@ -6,11 +6,13 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 fun ImageView.loadImage(url: String) {
-    Glide.with(this.context).load(url).into(this)
+    Glide.with(this.context).load(url).transition(DrawableTransitionOptions.withCrossFade())
+        .into(this)
 }
 
 fun List<String>.extractIds(): String {
@@ -31,6 +33,7 @@ fun String.formatDateString(): String {
 fun Fragment.navigateTo(action: NavDirections) {
     findNavController().navigate(action)
 }
+
 fun View.visible() {
     visibility = View.VISIBLE
 }
