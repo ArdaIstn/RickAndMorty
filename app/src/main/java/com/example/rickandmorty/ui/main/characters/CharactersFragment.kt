@@ -2,6 +2,8 @@ package com.example.rickandmorty.ui.main.characters
 
 import com.example.rickandmorty.ui.main.characters.adapter.CharactersVerticalAdapter
 import android.os.Bundle
+import android.os.Parcelable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,6 +27,8 @@ class CharactersFragment : Fragment() {
 
     private lateinit var binding: FragmentCharactersBinding
     private val viewModel: CharactersViewModel by viewModels()
+    private var verticalRecyclerViewState: Parcelable? = null
+
 
     private val locationsAdapter: LocationsHorizontalAdapter by lazy {
         LocationsHorizontalAdapter { location ->
@@ -146,9 +150,26 @@ class CharactersFragment : Fragment() {
     private fun navigateToCharacterDetail(character: Character) {
         val action = CharactersFragmentDirections.actionCharactersToDetail(character)
         navigateTo(action)
-        binding.searchView.clearFocus()
     }
-}
+
+    private fun clearSearchView() {
+        binding.searchView.apply {
+            setQuery("", false)
+            clearFocus()
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        verticalRecyclerViewState = binding.verticalRv.layoutManager?.onSaveInstanceState()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.verticalRv.layoutManager?.onRestoreInstanceState(verticalRecyclerViewState)
+    }
+
+
     fun resetVerticalRecyclerView() {
         binding.verticalRv.scrollToPosition(0)
     }
