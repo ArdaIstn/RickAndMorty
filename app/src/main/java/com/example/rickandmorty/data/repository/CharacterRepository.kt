@@ -3,16 +3,22 @@ package com.example.rickandmorty.data.repository
 import com.example.rickandmorty.common.Resource
 import com.example.rickandmorty.common.extractId
 import com.example.rickandmorty.common.extractIds
-import com.example.rickandmorty.data.datasource.CharacterDataSource
+import com.example.rickandmorty.data.datasource.local.CharacterLocalDataSource
+import com.example.rickandmorty.data.datasource.remote.CharacterRemoteDataSource
 import com.example.rickandmorty.data.model.Character
-import com.example.rickandmorty.data.model.LocationResult
+import com.example.rickandmorty.data.model.CharacterFav
 import com.example.rickandmorty.data.model.Result
+import kotlinx.coroutines.flow.Flow
 
-class CharacterRepository(private val characterDataSource: CharacterDataSource) {
+class CharacterRepository(
+    private val characterRemoteDataSource: CharacterRemoteDataSource,
+    private val characterLocalDataSource: CharacterLocalDataSource
+) {
 
+    // Api
     suspend fun getResultList(): Resource<List<Result>> {
         return try {
-            val response = characterDataSource.getResultList()
+            val response = characterRemoteDataSource.getResultList()
             if (response.isSuccessful) {
                 val locations = response.body()?.results.orEmpty()
                 Resource.Success(locations)
@@ -29,7 +35,7 @@ class CharacterRepository(private val characterDataSource: CharacterDataSource) 
         val ids = residentList.extractIds()
 
         return try {
-            val response = characterDataSource.getCharacterDetailsByIds(ids)
+            val response = characterRemoteDataSource.getCharacterDetailsByIds(ids)
             if (response.isSuccessful) {
                 val characters = response.body().orEmpty()
                 Resource.Success(characters)
@@ -45,7 +51,7 @@ class CharacterRepository(private val characterDataSource: CharacterDataSource) 
     suspend fun getCharacterByLocation(resident: String): Resource<List<Character>> {
         val ids = resident.extractId()
         return try {
-            val response = characterDataSource.getCharacterDetailsById(ids)
+            val response = characterRemoteDataSource.getCharacterDetailsById(ids)
             if (response.isSuccessful) {
                 // API null dönebilir, bu nedenle null kontrolü yapıyoruz
                 val character = response.body()
@@ -57,6 +63,31 @@ class CharacterRepository(private val characterDataSource: CharacterDataSource) 
         } catch (e: Exception) {
             Resource.Error(e) // Hata durumunda istisnayı döndürüyoruz
         }
+    }
+
+
+    //Fav
+    suspend fun insertCharacter(character: Character) {
+        val favCharacter = CharacterFav(
+            id = character.id,
+            name = character.name,
+            status = character.status,
+            species = character.species,
+            image = character.image,
+        )
+        characterLocalDataSource.insertCharacter(favCharacter)
+    }
+
+    suspend fun deleteCharacterById(characterId: Int) {
+        characterLocalDataSource.deleteCharacterById(characterId)
+    }
+
+    fun getFavCharacters(): Flow<List<CharacterFav>> {
+        return characterLocalDataSource.getFavCharacters()
+    }
+
+    suspend fun isFavorite(id: Int): Boolean {
+        return characterLocalDataSource.isFavorite(id)
     }
 
 
