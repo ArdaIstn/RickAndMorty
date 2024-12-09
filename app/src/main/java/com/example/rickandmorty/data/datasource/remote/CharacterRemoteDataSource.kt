@@ -1,11 +1,12 @@
-package com.example.rickandmorty.data.datasource
+package com.example.rickandmorty.data.datasource.remote
 
 import com.example.rickandmorty.data.model.Character
 import com.example.rickandmorty.data.model.LocationResult
 import com.example.rickandmorty.data.retrofit.CharacterApi
 import retrofit2.Response
 
-class CharacterDataSource(private val characterApi: CharacterApi) {
+
+class CharacterRemoteDataSource(private val characterApi: CharacterApi) {
 
     suspend fun getResultList(): Response<LocationResult> = characterApi.getLocations()
 
