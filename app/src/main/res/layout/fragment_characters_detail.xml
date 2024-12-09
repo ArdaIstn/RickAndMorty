@@ -23,7 +23,6 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:fontFamily="@font/pacifico"
         android:text="@string/characters_detail_title_text"
         android:textColor="@color/chardonnay"
@@ -371,13 +370,23 @@
         tools:text="Beth Smith" />
 
     <ImageView
-        android:id="@+id/backButton"
+        android:id="@+id/ivBack"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginStart="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="16dp"
         android:src="@drawable/baseline_arrow_back_24"
         app:layout_constraintBottom_toBottomOf="@+id/toolbarCharactersDetail"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/ivFav"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/iv_normal"
+        app:layout_constraintBottom_toBottomOf="@+id/toolbarCharactersDetail"
+        app:layout_constraintEnd_toEndOf="@+id/toolbarCharactersDetail"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

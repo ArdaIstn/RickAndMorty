@@ -20,8 +20,8 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="355dp"
+        android:layout_height="755dp"
         android:contentDescription="@string/welcome_image_content_descripton"
         app:layout_constraintBottom_toTopOf="@+id/tvWelcome"
         app:layout_constraintEnd_toEndOf="parent"
