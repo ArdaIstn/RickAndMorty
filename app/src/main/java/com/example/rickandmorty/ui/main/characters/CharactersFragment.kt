@@ -68,9 +68,7 @@ class CharactersFragment : Fragment() {
                 // ViewModel'e arama sorgusunu gönderiyoruz
                 newText?.let {
                     viewModel.filterCharacters(it)
-                    if (it.isEmpty()) {
-                        resetVerticalRecyclerView()
-                    }
+                    binding.verticalRv.scrollToPosition(0)
                 }
                 return true
             }
@@ -161,6 +159,7 @@ class CharactersFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
+        clearSearchView()
         verticalRecyclerViewState = binding.verticalRv.layoutManager?.onSaveInstanceState()
     }
 
@@ -169,12 +168,8 @@ class CharactersFragment : Fragment() {
         binding.verticalRv.layoutManager?.onRestoreInstanceState(verticalRecyclerViewState)
     }
 
-
     fun resetVerticalRecyclerView() {
-        binding.verticalRv.scrollToPosition(0)
+        binding.verticalRv.smoothScrollToPosition(0)
     }
 }
-
-
-
 

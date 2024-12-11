@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rickandmorty.data.model.Character
-import com.example.rickandmorty.data.model.CharacterFav
 import com.example.rickandmorty.data.repository.CharacterRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -42,9 +41,7 @@ class CharactersDetailViewModel @Inject constructor(private val characterReposit
             withContext(Dispatchers.Main) {
                 _isFavourite.postValue(isFav)
             }
-
         }
-
     }
 
 

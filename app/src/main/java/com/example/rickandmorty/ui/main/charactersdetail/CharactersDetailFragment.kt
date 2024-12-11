@@ -13,7 +13,6 @@ import com.example.rickandmorty.common.extractIds
 import com.example.rickandmorty.common.formatDateString
 import com.example.rickandmorty.common.loadImage
 import com.example.rickandmorty.databinding.FragmentCharactersDetailBinding
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
