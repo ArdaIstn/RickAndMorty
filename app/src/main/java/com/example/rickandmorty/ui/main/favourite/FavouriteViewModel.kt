@@ -5,10 +5,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.rickandmorty.data.model.Character
 import com.example.rickandmorty.data.model.CharacterFav
 import com.example.rickandmorty.data.repository.CharacterRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -39,6 +41,13 @@ class FavouriteViewModel @Inject constructor(private val characterRepository: Ch
         viewModelScope.launch(Dispatchers.IO) {
             characterRepository.deleteCharacterById(characterId)
         }
-
     }
+
+    fun deleteAll() {
+        viewModelScope.launch(Dispatchers.IO) {
+            characterRepository.deleteAll()
+        }
+    }
+
+
 }

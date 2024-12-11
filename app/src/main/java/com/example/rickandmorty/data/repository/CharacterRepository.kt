@@ -89,6 +89,9 @@ class CharacterRepository(
     suspend fun isFavorite(id: Int): Boolean {
         return characterLocalDataSource.isFavorite(id)
     }
+    suspend fun deleteAll() {
+        characterLocalDataSource.deleteAll()
+    }
 
 
 }

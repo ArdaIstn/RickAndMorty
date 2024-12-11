@@ -7,9 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.rickandmorty.R
+import com.example.rickandmorty.data.model.Character
+import com.example.rickandmorty.data.model.CharacterFav
 import com.example.rickandmorty.databinding.FragmentFavouriteBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -21,7 +26,7 @@ class FavouriteFragment : Fragment() {
     private val viewModel: FavouriteViewModel by viewModels()
     private val favouriteAdapter by lazy {
         FavouriteAdapter(onFavCharacterSelected = {
-            viewModel.deleteCharacterById(it.id)
+            showDeleteConfirmationDialog(it.id)
         })
     }
 
@@ -37,8 +42,19 @@ class FavouriteFragment : Fragment() {
         setUpRecyclerView()
         observeFavouriteCharacters()
 
-    }
+        binding.toolbarFavourite.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.deleteAll -> {
+                    clickDeleteAll()
+                    true
+                }
 
+                else -> {
+                    false
+                }
+            }
+        }
+    }
 
     private fun setUpRecyclerView() {
         binding.favRv.apply {
@@ -52,10 +68,29 @@ class FavouriteFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.favCharacters.observe(viewLifecycleOwner) {
                 favouriteAdapter.differ.submitList(it)
-                if (it.isEmpty()) {
-                    Snackbar.make(requireView(), "Liste boş", Snackbar.LENGTH_SHORT).show()
-                }
+                if (it.isEmpty()) binding.favAnimationView.visibility =
+                    View.VISIBLE else binding.favAnimationView.visibility = View.GONE
             }
         }
     }
+
+    private fun showDeleteConfirmationDialog(characterId: Int) {
+        MaterialAlertDialogBuilder(requireContext()).setTitle("Silme Onayı")
+            .setMessage("Bu karakteri favorilerden silmek istediğinize emin misiniz?")
+            .setPositiveButton("Evet") { dialog, _ ->
+                // Silme işlemini burada gerçekleştir
+                viewModel.deleteCharacterById(characterId)
+                Snackbar.make(requireView(), "Karakter silindi.", Snackbar.LENGTH_SHORT).show()
+                dialog.dismiss()
+            }.setNegativeButton("Hayır") { dialog, _ ->
+                // İşlemi iptal et
+                dialog.dismiss()
+            }.show()
+    }
+
+    private fun clickDeleteAll() {
+        viewModel.deleteAll()
+        Snackbar.make(requireView(), "Tüm karakterler silindi.", Snackbar.LENGTH_SHORT).show()
+    }
+
 }

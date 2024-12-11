@@ -23,4 +23,7 @@ interface FavCharacterDAO {
     @Query("SELECT EXISTS(SELECT 1 FROM character_fav WHERE id = :id)")
     suspend fun isFavorite(id: Int): Boolean
 
+    @Query("DELETE FROM character_fav")
+    suspend fun deleteAll()
+
 }

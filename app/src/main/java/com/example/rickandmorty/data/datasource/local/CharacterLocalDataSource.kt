@@ -11,9 +11,11 @@ class CharacterLocalDataSource(private val favCharacterDAO: FavCharacterDAO) {
     suspend fun deleteCharacterById(characterId: Int) =
         favCharacterDAO.deleteCharacterById(characterId)
 
-     fun getFavCharacters(): Flow<List<CharacterFav>> = favCharacterDAO.getFavCharacters()
+    fun getFavCharacters(): Flow<List<CharacterFav>> = favCharacterDAO.getFavCharacters()
 
     suspend fun isFavorite(id: Int): Boolean = favCharacterDAO.isFavorite(id)
+
+    suspend fun deleteAll() = favCharacterDAO.deleteAll()
 
 
 }
