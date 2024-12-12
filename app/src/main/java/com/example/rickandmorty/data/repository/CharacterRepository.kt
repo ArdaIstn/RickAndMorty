@@ -16,9 +16,9 @@ class CharacterRepository(
 ) {
 
     // Api
-    suspend fun getResultList(): Resource<List<Result>> {
+    suspend fun getLocations(): Resource<List<Result>> {
         return try {
-            val response = characterRemoteDataSource.getResultList()
+            val response = characterRemoteDataSource.getLocations()
             if (response.isSuccessful) {
                 val locations = response.body()?.results.orEmpty()
                 Resource.Success(locations)
@@ -31,11 +31,11 @@ class CharacterRepository(
     }
 
 
-    suspend fun getCharactersByLocation(residentList: List<String>): Resource<List<Character>> {
+    suspend fun getMultipleCharactersByIds(residentList: List<String>): Resource<List<Character>> {
         val ids = residentList.extractIds()
 
         return try {
-            val response = characterRemoteDataSource.getCharacterDetailsByIds(ids)
+            val response = characterRemoteDataSource.getMultipleCharactersByIds(ids)
             if (response.isSuccessful) {
                 val characters = response.body().orEmpty()
                 Resource.Success(characters)
@@ -48,10 +48,11 @@ class CharacterRepository(
         }
     }
 
-    suspend fun getCharacterByLocation(resident: String): Resource<List<Character>> {
+
+    suspend fun getCharacterById(resident: String): Resource<List<Character>> {
         val ids = resident.extractId()
         return try {
-            val response = characterRemoteDataSource.getCharacterDetailsById(ids)
+            val response = characterRemoteDataSource.getCharacterById(ids)
             if (response.isSuccessful) {
                 // API null dönebilir, bu nedenle null kontrolü yapıyoruz
                 val character = response.body()

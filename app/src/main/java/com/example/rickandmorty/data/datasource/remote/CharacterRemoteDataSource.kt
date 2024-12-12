@@ -8,15 +8,15 @@ import retrofit2.Response
 
 class CharacterRemoteDataSource(private val characterApi: CharacterApi) {
 
-    suspend fun getResultList(): Response<LocationResult> = characterApi.getLocations()
+    suspend fun getLocations(): Response<LocationResult> = characterApi.getLocations()
 
-    // Karakterlerin detaylarını çekmek için
-    suspend fun getCharacterDetailsByIds(ids: String): Response<List<Character>> {
-        return characterApi.getMultipleCharacters(ids)
+
+    suspend fun getMultipleCharactersByIds(ids: String): Response<List<Character>> {
+        return characterApi.getMultipleCharactersByIds(ids)
     }
 
-    suspend fun getCharacterDetailsById(id: String): Response<Character> {
-        return characterApi.getCharacterDetailsById(id)
+    suspend fun getCharacterById(id: String): Response<Character> {
+        return characterApi.getCharacterById(id)
 
     }
 }

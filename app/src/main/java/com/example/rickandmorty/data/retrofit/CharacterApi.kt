@@ -14,10 +14,10 @@ interface CharacterApi {
     suspend fun getLocations(): Response<LocationResult>
 
     @GET(CHARACTERS_ENDPOINT)
-    suspend fun getMultipleCharacters(@Path("ids") ids: String): Response<List<Character>>
+    suspend fun getMultipleCharactersByIds(@Path("ids") ids: String): Response<List<Character>>
 
     @GET(CHARACTER_ENDPOINT)
-    suspend fun getCharacterDetailsById(
+    suspend fun getCharacterById(
         @Path("id") id: String
     ): Response<Character>
 
