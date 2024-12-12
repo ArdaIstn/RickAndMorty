@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.rickandmorty.R
 import com.example.rickandmorty.common.gone
 import com.example.rickandmorty.common.navigateTo
 import com.example.rickandmorty.common.visible
@@ -22,22 +23,23 @@ import com.example.rickandmorty.ui.main.characters.adapter.LocationsHorizontalAd
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+
 @AndroidEntryPoint
 class CharactersFragment : Fragment() {
 
-    private lateinit var binding: FragmentCharactersBinding
+    private var _binding: FragmentCharactersBinding? = null
+    private val binding get() = _binding!!
     private val viewModel: CharactersViewModel by viewModels()
     private var verticalRecyclerViewState: Parcelable? = null
 
-
-    private val locationsAdapter: LocationsHorizontalAdapter by lazy {
+    private val locationsAdapter by lazy {
         LocationsHorizontalAdapter { location ->
-            viewModel.fetchCharactersByLocation(location.residents)
+            viewModel.getCharacter(location.residents)
             clearSearchView()
         }
     }
 
-    private val charactersAdapter: CharactersVerticalAdapter by lazy {
+    private val charactersAdapter by lazy {
         CharactersVerticalAdapter { character ->
             navigateToCharacterDetail(character)
         }
@@ -46,35 +48,23 @@ class CharactersFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        binding = FragmentCharactersBinding.inflate(inflater, container, false)
+        Log.e("CharactersFragment", "onCreateView called")
+        _binding = FragmentCharactersBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        Log.e("CharactersFragment", "onViewCreated called")
         super.onViewCreated(view, savedInstanceState)
-        setupRecyclerViews()
+        setupUI()
         setupObservers()
+    }
+
+    private fun setupUI() {
+        setupRecyclerViews()
         setupSearchView()
+        setupStatusMenuListener()
     }
-
-    private fun setupSearchView() {
-        binding.searchView.setOnQueryTextListener(object : OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                // Submit işlemi yapılmazsa true döner
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                // ViewModel'e arama sorgusunu gönderiyoruz
-                newText?.let {
-                    viewModel.filterCharacters(it)
-                    binding.verticalRv.scrollToPosition(0)
-                }
-                return true
-            }
-        })
-    }
-
 
     private fun setupRecyclerViews() {
         binding.horizontalRv.apply {
@@ -89,36 +79,54 @@ class CharactersFragment : Fragment() {
         }
     }
 
+    private fun setupSearchView() {
+        binding.searchView.setOnQueryTextListener(object : OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                newText?.let {
+                    viewModel.filterCharacters(it)
+                    binding.verticalRv.scrollToPosition(0)
+                }
+                return true
+            }
+        })
+    }
+
+    private fun setupStatusMenuListener() {
+        binding.toolbarCharacters.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.filterDead -> viewModel.filterCharactersByStatus("Dead")
+                R.id.filterAlive -> viewModel.filterCharactersByStatus("Alive")
+                R.id.filterUnknown -> viewModel.filterCharactersByStatus("unknown")
+                R.id.removeFilter -> viewModel.filterCharactersByStatus("")
+                else -> return@setOnMenuItemClickListener false
+            }
+            true
+        }
+    }
 
     private fun setupObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.uiState.collect { state ->
-                handleErrorState(state)
-                handleLocationsState(state)
-                handleCharactersState(state)
-                handleEmptyState(state)
-
-                if (locationsAdapter.selectedPosition == -1) {
-                    val firstLocationWithResidents = state.locations?.firstOrNull { location ->
-                        location.residents.isNotEmpty()
-                    }
-
-                    firstLocationWithResidents?.let {
-                        locationsAdapter.selectedPosition =
-                            0 // İlk lokasyonu seçili olarak işaretle
-                        viewModel.fetchCharactersByLocation(it.residents) // İlk lokasyondaki karakterleri yükle
-                    }
-                }
-
+                handleUIState(state)
             }
         }
     }
 
+    private fun handleUIState(state: CharactersViewModel.CharacterState) {
+        handleLoadingState(state)
+        handleErrorState(state)
+        handleLocationsState(state)
+        handleCharactersState(state)
+        handleEmptyState(state)
+        handleInitialSelection(state)
+    }
 
-    private fun handleEmptyState(state: CharactersViewModel.CharacterState) {
-        if (state.isEmpty) {
-            binding.animationView.visible()
-        }
+    private fun handleLoadingState(state: CharactersViewModel.CharacterState) {
+        if (state.isLoading) binding.progressBar.visible() else binding.progressBar.gone()
     }
 
     private fun handleErrorState(state: CharactersViewModel.CharacterState) {
@@ -136,12 +144,20 @@ class CharactersFragment : Fragment() {
     private fun handleCharactersState(state: CharactersViewModel.CharacterState) {
         state.characters?.let { characters ->
             charactersAdapter.differ.submitList(characters)
-            if (characters.isEmpty()) {
-                binding.animationView.visible()
-            } else {
-                binding.animationView.gone()
-            }
+            if (characters.isEmpty()) binding.animationView.visible() else binding.animationView.gone()
+        }
+    }
 
+    private fun handleEmptyState(state: CharactersViewModel.CharacterState) {
+        if (state.isEmpty) binding.animationView.visible() else binding.animationView.gone()
+    }
+
+    private fun handleInitialSelection(state: CharactersViewModel.CharacterState) {
+        if (locationsAdapter.selectedPosition == -1) {
+            state.locations?.firstOrNull { it.residents.isNotEmpty() }?.let {
+                locationsAdapter.selectedPosition = 0
+                viewModel.getCharacter(it.residents)
+            }
         }
     }
 
@@ -157,10 +173,14 @@ class CharactersFragment : Fragment() {
         }
     }
 
+    fun resetVerticalRecyclerView() {
+        binding.verticalRv.smoothScrollToPosition(0)
+    }
+
     override fun onPause() {
         super.onPause()
-        clearSearchView()
         verticalRecyclerViewState = binding.verticalRv.layoutManager?.onSaveInstanceState()
+        clearSearchView()
     }
 
     override fun onResume() {
@@ -168,8 +188,6 @@ class CharactersFragment : Fragment() {
         binding.verticalRv.layoutManager?.onRestoreInstanceState(verticalRecyclerViewState)
     }
 
-    fun resetVerticalRecyclerView() {
-        binding.verticalRv.smoothScrollToPosition(0)
-    }
+
 }
 

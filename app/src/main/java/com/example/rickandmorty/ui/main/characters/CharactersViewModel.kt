@@ -1,8 +1,5 @@
 package com.example.rickandmorty.ui.main.characters
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rickandmorty.common.Resource
@@ -15,41 +12,39 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+
 @HiltViewModel
 class CharactersViewModel @Inject constructor(
     private val characterRepository: CharacterRepository
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(CharacterState())
+    private val _uiState = MutableStateFlow(CharacterState(isLoading = true))
     val uiState: StateFlow<CharacterState> get() = _uiState
 
     private var originalCharacterList: List<Character> = emptyList()
+    private var currentCharacterList: List<Character> = emptyList()
+
 
     init {
-        fetchLocations()
+        getLocations()
     }
 
-    private fun fetchLocations() {
+    private fun getLocations() {
         viewModelScope.launch {
-
-            when (val response = characterRepository.getResultList()) {
+            when (val response = characterRepository.getLocations()) {
                 is Resource.Success -> {
-                    // Başarılı durumda State'i güncelliyoruz
                     _uiState.value = _uiState.value.copy(
                         locations = response.data, isEmpty = response.data.isEmpty()
                     )
                 }
 
-
                 is Resource.Fail -> {
-                    // Hata durumunda failMessage ile güncelleme yapıyoruz
                     _uiState.value = _uiState.value.copy(
                         failMessage = response.message
                     )
                 }
 
                 is Resource.Error -> {
-                    // Hata mesajını direkt olarak UI'ye gönderiyoruz
                     _uiState.value = _uiState.value.copy(
                         failMessage = response.throwable.message
                     )
@@ -58,76 +53,73 @@ class CharactersViewModel @Inject constructor(
         }
     }
 
-
-    fun fetchCharactersByLocation(residentList: List<String>) {
+    fun getCharacter(residentList: List<String>) {
         viewModelScope.launch {
             if (residentList.isEmpty()) {
-                // Liste boşsa UI'yi güncelliyoruz
                 _uiState.value = _uiState.value.copy(
-                    characters = emptyList(), isEmpty = true
+                    characters = emptyList(), isEmpty = true, isLoading = false
                 )
                 originalCharacterList = emptyList()
+                currentCharacterList = emptyList()
                 return@launch
             }
-
-
             val result = if (residentList.size == 1) {
-                characterRepository.getCharacterByLocation(residentList.first())
+                characterRepository.getCharacterById(residentList.first())
             } else {
-                characterRepository.getCharactersByLocation(residentList)
+                characterRepository.getMultipleCharactersByIds(residentList)
             }
 
             when (result) {
                 is Resource.Success -> {
-                    // Başarılı durumda karakterleri UI'ye gönderiyoruz
-                    _uiState.value = _uiState.value.copy(
-                        characters = result.data, isEmpty = result.data.isEmpty()
-                    )
                     originalCharacterList = result.data
+                    currentCharacterList = result.data
+                    _uiState.value = _uiState.value.copy(
+                        characters = result.data, isEmpty = result.data.isEmpty(), isLoading = false
+                    )
                 }
 
                 is Resource.Fail -> {
-                    // Hata durumunda failMessage ile güncelliyoruz
-                    _uiState.value = _uiState.value.copy(
-                        failMessage = result.message
-                    )
+                    _uiState.value = _uiState.value.copy(failMessage = result.message)
                 }
 
                 is Resource.Error -> {
-                    // Hata mesajını UI'ye gönderiyoruz
-                    _uiState.value = _uiState.value.copy(
-                        failMessage = result.throwable.message
-                    )
+                    _uiState.value = _uiState.value.copy(failMessage = result.throwable.message)
                 }
             }
         }
     }
 
-
     fun filterCharacters(query: String) {
         val filteredList = if (query.isEmpty()) {
-            // Eğer query boşsa, orijinal listeyi döndür
-            Log.e("query", "Boş kanka")
-            originalCharacterList
-
+            currentCharacterList
         } else {
-            // Arama sorgusuna göre filtreleme yap
-            originalCharacterList.filter {
-                Log.e("query", "Dolu kanka")
+            currentCharacterList.filter {
                 it.name.contains(query, ignoreCase = true)
             }
         }
-
-        // UI'yi güncelle
-        _uiState.value = _uiState.value.copy(characters = filteredList)
+        _uiState.value =
+            _uiState.value.copy(characters = filteredList, isEmpty = filteredList.isEmpty())
     }
 
+    fun filterCharactersByStatus(status: String) {
+
+        currentCharacterList = if (status.isEmpty()) {
+            originalCharacterList
+        } else {
+            originalCharacterList.filter {
+                it.status.equals(status, ignoreCase = true)
+            }
+        }
+        _uiState.value = _uiState.value.copy(
+            characters = currentCharacterList, isEmpty = currentCharacterList.isEmpty()
+        )
+    }
 
     data class CharacterState(
         val locations: List<Result>? = null,
         val characters: List<Character>? = null,
         var isEmpty: Boolean = false,
-        val failMessage: String? = null
+        val failMessage: String? = null,
+        val isLoading: Boolean = false,
     )
 }
-
