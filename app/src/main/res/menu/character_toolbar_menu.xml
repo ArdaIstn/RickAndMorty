@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/filterDead"
+        android:title="@string/filter_dead" />
+    <item
+        android:id="@+id/filterAlive"
+        android:title="@string/filter_alive" />
+    <item
+        android:id="@+id/filterUnknown"
+        android:title="@string/filter_unknown" />
+    <item
+        android:id="@+id/removeFilter"
+        android:title="@string/remove_filter" />
+</menu>
