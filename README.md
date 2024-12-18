@@ -77,39 +77,42 @@ Changes to the data automatically propagate to the UI, ensuring the View is alwa
 This project is XML based and written in Kotlin. Below are the libraries and tools utilized in the project:  
 
 #### 1. **Jetpack Navigation**  
-   - Manages in-app navigation, including fragment transactions and passing data between destinations, with a clear and consistent navigation graph.  
+   - Manages in-app navigation, including fragment transactions and passing data between destinations, with a clear and consistent navigation graph.
+     
+#### 2. **Viewpager2 With Tablayout**  
+   - Enables smooth navigation between fragments using swipe gestures, integrated with TabLayout for a clear and visually organized way to switch between different tabs. 
 
-#### 2. **Room**  
+#### 3. **Room**  
    - A database library that provides an abstraction layer over SQLite, making it easier to perform database operations while ensuring compile-time safety.  
 
-#### 3. **Retrofit**  
+#### 4. **Retrofit**  
    - A type-safe HTTP client for Android and Java that simplifies making API calls and parsing responses into models.  
 
-#### 4. **Glide**  
+#### 5. **Glide**  
    - An image-loading library that efficiently fetches, displays, and caches images from URLs or local resources.  
 
-#### 5. **Hilt**  
+#### 6. **Hilt**  
    - A dependency injection framework for Android, built on top of Dagger, which simplifies managing dependencies across the application.  
 
-#### 6. **Coroutines**  
+#### 7. **Coroutines**  
    - A Kotlin library for asynchronous programming, making it easier to manage background tasks and maintain a responsive UI.  
 
-#### 7. **Flow**  
+#### 8. **Flow**  
    - A reactive streams API from Kotlin that allows working with asynchronous data streams in a structured and thread-safe manner.  
 
-#### 8. **StateFlow**  
+#### 9. **StateFlow**  
    - A Kotlin state management library built on Flow, used to manage and observe state updates in a reactive and lifecycle-aware manner.  
 
-#### 9. **LiveData**  
+#### 10. **LiveData**  
    - A lifecycle-aware observable data holder from Jetpack, often used to keep UI components up to date with data changes in the ViewModel.  
 
-#### 10. **Firebase Firestore**  
+#### 11. **Firebase Firestore**  
    - A NoSQL cloud database from Firebase for storing and syncing data in real time across devices.  
 
-#### 11. **Firebase Auth**  
+#### 12. **Firebase Auth**  
    - Provides authentication services for managing user sign-in and sign-up securely, including email and password authentication.  
 
-#### 12. **Lottie**  
+#### 13. **Lottie**  
    - A library for rendering high-quality, lightweight animations exported as JSON from Adobe After Effects.  
 
 
