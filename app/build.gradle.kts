@@ -4,6 +4,8 @@ plugins {
     id("androidx.navigation.safeargs")
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+    alias(libs.plugins.google.gms.google.services)
+
 
 }
 
@@ -62,6 +64,8 @@ dependencies {
 
     //Hilt
     implementation(libs.hilt.android)
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.firestore)
     kapt(libs.hilt.android.compiler)
 
     //Lottie
@@ -70,9 +74,10 @@ dependencies {
     //Room
     implementation(libs.room.runtime)
     implementation(libs.androidx.room.ktx)
-    kapt ("androidx.room:room-compiler:2.6.1")
+    kapt (libs.androidx.room.compiler)
 
-
+    //DataStore
+    implementation(libs.datastore.preferences)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
