@@ -31,7 +31,7 @@ class CharactersDetailViewModel @Inject constructor(private val characterReposit
             characterRepository.insertCharacter(character)
             withContext(Dispatchers.Main) {
                 _isFavourite.postValue(true)
-            }  // Favori durumunu güncelle
+            }
         }
     }
 

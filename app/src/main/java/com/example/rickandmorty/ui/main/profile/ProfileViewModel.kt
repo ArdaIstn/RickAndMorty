@@ -11,7 +11,6 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-//Repository'den gidip firestore'da tutulan verileri alıp ui'da gösterecek mekanizmayı kur.
 class ProfileViewModel @Inject constructor(private val userRepository: UserRepository) :
     ViewModel() {
     private var _profileState = MutableLiveData(ProfileState(isLoading = true))

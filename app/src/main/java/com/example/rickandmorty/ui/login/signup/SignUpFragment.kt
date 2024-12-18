@@ -42,13 +42,12 @@ class SignUpFragment : Fragment() {
     private fun setUpObservers() {
         signUpViewModel.signUpState.observe(viewLifecycleOwner) { state ->
             with(state) {
-                // Başarı durumu
+
                 if (isSignUp) navigateToSignInFragment()
 
-                // Snackbar üzerinden genel mesajlar
                 failMessage?.let { showSnackbar(it) }
                 errorMessage?.let { showSnackbar(it) }
-                // Input alanı hatalarını ayarla
+
                 setFieldError(binding.editTextEmailSignUp, eMailError)
                 setFieldError(binding.editTextPasswordSignUp, passwordError)
                 setFieldError(binding.editTextConfirmPassword, confirmPasswordError)

@@ -14,8 +14,7 @@ class LocationsHorizontalAdapter(
     private val onLocationSelected: (Result) -> Unit
 ) : RecyclerView.Adapter<LocationsHorizontalAdapter.LocationViewHolder>() {
 
-    // Seçilen pozisyonu takip etmek için bir değişken ekliyoruz
-     var selectedPosition: Int = RecyclerView.NO_POSITION
+    var selectedPosition: Int = RecyclerView.NO_POSITION
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LocationViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -43,13 +42,12 @@ class LocationsHorizontalAdapter(
                 binding.locationCard.setBackgroundResource(R.drawable.card_unselected)
             }
 
-            // Tıklama olayı
+
             binding.root.setOnClickListener {
-                // Seçili pozisyonu güncelle
                 val previousPosition = selectedPosition
                 selectedPosition = position
 
-                // Eski ve yeni pozisyonları güncelle
+
                 notifyItemChanged(previousPosition)
                 notifyItemChanged(selectedPosition)
 

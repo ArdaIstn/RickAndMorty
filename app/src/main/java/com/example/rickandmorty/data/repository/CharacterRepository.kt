@@ -44,7 +44,7 @@ class CharacterRepository(
             }
 
         } catch (e: Exception) {
-            Resource.Error(e) // Hata durumunda istisnayı döndür
+            Resource.Error(e)
         }
     }
 
@@ -54,15 +54,15 @@ class CharacterRepository(
         return try {
             val response = characterRemoteDataSource.getCharacterById(ids)
             if (response.isSuccessful) {
-                // API null dönebilir, bu nedenle null kontrolü yapıyoruz
+
                 val character = response.body()
                 val characterList = if (character != null) listOf(character) else emptyList()
-                Resource.Success(characterList) // Eğer character null ise boş liste dönüyoruz
+                Resource.Success(characterList)
             } else {
                 Resource.Fail(response.message())
             }
         } catch (e: Exception) {
-            Resource.Error(e) // Hata durumunda istisnayı döndürüyoruz
+            Resource.Error(e)
         }
     }
 
@@ -90,6 +90,7 @@ class CharacterRepository(
     suspend fun isFavorite(id: Int): Boolean {
         return characterLocalDataSource.isFavorite(id)
     }
+
     suspend fun deleteAll() {
         characterLocalDataSource.deleteAll()
     }

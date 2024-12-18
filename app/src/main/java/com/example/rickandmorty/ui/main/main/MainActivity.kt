@@ -29,7 +29,6 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigationView.setOnItemReselectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.characters_nav_graph -> {
-                    // Eğer şu an ekranda Home Fragment varsa onun reset metodunu çağır
 
                     val currentFragment =
                         navHostFragment.childFragmentManager.fragments.firstOrNull()
@@ -38,7 +37,7 @@ class MainActivity : AppCompatActivity() {
                         currentFragment.resetVerticalRecyclerView()
                     }
                 }
-                // Diğer sekmeler için gerekirse işlemler eklenebilir.
+
             }
         }
 
@@ -52,12 +51,10 @@ class MainActivity : AppCompatActivity() {
             val screenHeight = rootView.rootView.height
             val keypadHeight = screenHeight - rect.bottom
 
-            // Klavye açık mı kontrol et
+
             if (keypadHeight > screenHeight * 0.15) {
-                // Klavye açık, BottomNavigationView'i gizle
                 binding.bottomNavigationView.gone()
             } else {
-                // Klavye kapalı, BottomNavigationView'i göster
                 binding.bottomNavigationView.visible()
             }
         }

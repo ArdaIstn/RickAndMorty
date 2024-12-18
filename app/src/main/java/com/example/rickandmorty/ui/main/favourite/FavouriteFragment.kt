@@ -75,22 +75,20 @@ class FavouriteFragment : Fragment() {
     }
 
     private fun showDeleteConfirmationDialog(characterId: Int) {
-        MaterialAlertDialogBuilder(requireContext()).setTitle("Silme Onayı")
-            .setMessage("Bu karakteri favorilerden silmek istediğinize emin misiniz?")
-            .setPositiveButton("Evet") { dialog, _ ->
-                // Silme işlemini burada gerçekleştir
+        MaterialAlertDialogBuilder(requireContext()).setTitle("Delete?")
+            .setMessage("Are you sure you want to delete this character from your favorites?")
+            .setPositiveButton("Yes") { dialog, _ ->
                 viewModel.deleteCharacterById(characterId)
-                Snackbar.make(requireView(), "Karakter silindi.", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(requireView(), "Character deleted.", Snackbar.LENGTH_SHORT).show()
                 dialog.dismiss()
-            }.setNegativeButton("Hayır") { dialog, _ ->
-                // İşlemi iptal et
+            }.setNegativeButton("No") { dialog, _ ->
                 dialog.dismiss()
             }.show()
     }
 
     private fun clickDeleteAll() {
         viewModel.deleteAll()
-        Snackbar.make(requireView(), "Tüm karakterler silindi.", Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(requireView(), "All characters deleted", Snackbar.LENGTH_SHORT).show()
     }
 
 }

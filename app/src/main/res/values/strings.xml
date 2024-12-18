@@ -1,3 +1,27 @@
 <resources>
     <string name="app_name">RickAndMorty</string>
+    <string name="welcome_image_content_descripton">welcome_image</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="characters_title_text">Characters</string>
+    <string name="characters_detail_title_text">Character Detail</string>
+    <string name="character_detail_content_description">CharacterDetail</string>
+    <string name="favourites">Favourites</string>
+    <string name="delete_all">Delete All</string>
+    <string name="filter_dead">Filter Dead</string>
+    <string name="filter_alive">Filter Alive</string>
+    <string name="filter_unknown">Filter Unknown</string>
+    <string name="remove_filter">Remove Filter</string>
+    <string name="e_mail_hint">E-Mail</string>
+    <string name="password_hint">Password</string>
+    <string name="confirm_password_hint">Confirm Password</string>
+    <string name="nickname_hint">Nickname</string>
+    <string name="phone_number_hint">Phone Number</string>
+    <string name="sign_in_btn_text">SIGN IN</string>
+    <string name="sign_up_btn_text">SIGN UP</string>
+    <string name="profile_title_text">Profile</string>
+    <string name="tv_email_adress_profile">E-Mail Adress</string>
+    <string name="tv_nickname_profile">Nickname</string>
+    <string name="tv_phone_number_profile">Phone Number</string>
+    <string name="tv_sign_out_profile">SIGN OUT</string>
 </resources>

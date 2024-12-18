@@ -18,4 +18,7 @@
     <color name="elm">#197c84</color>
     <color name="icecold">#b0e8f4</color>
     <color name="macaroniandcheese">#ffb57a</color>
+    <color name="card_background_color">#CBDBDB</color>
+    <color name="helper_text_color">#FF0000</color>
+
 </resources>
