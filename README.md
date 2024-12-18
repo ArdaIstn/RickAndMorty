@@ -1,4 +1,4 @@
-![gif](https://github.com/user-attachments/assets/3af111da-70aa-4be2-b7b1-6389ceff68d4)# Rick And Morty App
+ Rick And Morty App
 In the Rick and Morty universe, you can access locations and list the characters living in those locations. Additionally, you can navigate to the details of any character to learn more about them. You also have the ability to add or remove characters from your favorites and filter them based on their status.
 
 ## Features
