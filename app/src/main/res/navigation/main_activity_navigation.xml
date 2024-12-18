@@ -11,4 +11,9 @@
         android:label="fragment_favourite"
         tools:layout="@layout/fragment_favourite" />
     <include app:graph="@navigation/characters_nav_graph" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.rickandmorty.ui.main.profile.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
 </navigation>
